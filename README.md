@@ -16,7 +16,7 @@ print(template.substitute(a="d", b="e", c="f"))
 >>> "d.e.f"
 ```
 
-Support for optional variable substitutions is also supported:
+Support for optional variable substitutions is also included:
 
 ```python
 template = Template("{a}.{b}[.{c}]")
