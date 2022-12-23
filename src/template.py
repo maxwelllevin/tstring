@@ -85,7 +85,7 @@ def _substitute(
     return resolved
 
 
-class TemplateString:
+class Template:
     """Python f-string implementation with lazy and optional variable substitutions.
 
     The template string is expected to be formatted in the same way as python f-strings,

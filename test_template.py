@@ -1,7 +1,7 @@
 from typing import Dict
 import pytest
 
-from src.template_str import TemplateString
+from src.template import Template
 
 
 @pytest.mark.parametrize(
@@ -20,7 +20,7 @@ from src.template_str import TemplateString
     ),
 )
 def test_correctness(expected: str, template: str, mapping: Dict[str, str]):
-    assert TemplateString(template).substitute(mapping, True) == expected
+    assert Template(template).substitute(mapping, True) == expected
 
 
 @pytest.mark.parametrize(
@@ -36,14 +36,14 @@ def test_failures(
     error: Exception, template: str, mapping: Dict[str, str], allow_missing: bool
 ):
     with pytest.raises(error):
-        TemplateString(template).substitute(mapping, allow_missing=allow_missing)
+        Template(template).substitute(mapping, allow_missing=allow_missing)
 
 
 def test_repr():
-    template = TemplateString("{a}{b}{c}")
-    assert repr(template) == "TemplateString('{a}{b}{c}')"
+    template = Template("{a}{b}{c}")
+    assert repr(template) == "Template('{a}{b}{c}')"
 
 
 def test_str():
-    template = TemplateString("{a}{b}{c}")
+    template = Template("{a}{b}{c}")
     assert str(template) == "{a}{b}{c}"
