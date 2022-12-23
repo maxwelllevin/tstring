@@ -1,5 +1,9 @@
 # tstring
 
+[![main](https://github.com/maxwelllevin/tstring/actions/workflows/pytest.yml/badge.svg)](https://github.com/maxwelllevin/tstring/actions/workflows/pytest.yml)
+[![build](https://github.com/maxwelllevin/tstring/actions/workflows/pypi.yml/badge.svg)](https://github.com/maxwelllevin/tstring/actions/workflows/pypi.yml)
+![PyPI](https://img.shields.io/pypi/v/tstring)
+
 Curly-brace string templates in Python.
 
 ```shell
