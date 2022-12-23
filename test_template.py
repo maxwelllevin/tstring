@@ -5,22 +5,25 @@ from src.tstring import Template
 
 
 @pytest.mark.parametrize(
-    ("expected", "template", "mapping"),
+    ("expected", "template", "mapping", "allow_missing"),
     (
-        ("", "", dict()),
-        ("a", "a", dict()),
-        ("a", "{b}", dict(b="a")),
-        ("a", "[{b}]", dict(b="a")),
-        ("", "[{b}]", dict()),
-        ("ab", "{a}[{b}]", dict(a="a", b="b")),
-        ("a.b", "{a}[.{b}]", dict(a="a", b="b")),
-        ("defg", "{a}{b}{c}g", dict(a="d", b="e", c="f")),
-        ("d.e-gf", "{a}.{b}[-g{c}]", dict(a="d", b="e", c="f")),
-        ("d.e-gf", "{a}.{b}[-g{c}][-{d}]", dict(a="d", b="e", c="f")),
+        ("", "", dict(), True),
+        ("a", "a", dict(), True),
+        ("a", "{b}", dict(b="a"), True),
+        ("a", "[{b}]", dict(b="a"), True),
+        ("", "[-{b}]", None, False),
+        ("", "[{b}]", dict(), True),
+        ("ab", "{a}[{b}]", dict(a="a", b="b"), True),
+        ("a.b", "{a}[.{b}]", dict(a="a", b="b"), True),
+        ("defg", "{a}{b}{c}g", dict(a="d", b="e", c="f"), True),
+        ("d.e-gf", "{a}.{b}[-g{c}]", dict(a="d", b="e", c="f"), True),
+        ("d.e-gf", "{a}.{b}[-g{c}][-{d}]", dict(a="d", b="e", c="f"), True),
     ),
 )
-def test_correctness(expected: str, template: str, mapping: Dict[str, str]):
-    assert Template(template).substitute(mapping, True) == expected
+def test_correctness(
+    expected: str, template: str, mapping: Dict[str, str], allow_missing: bool
+):
+    assert Template(template).substitute(mapping, allow_missing) == expected
 
 
 @pytest.mark.parametrize(

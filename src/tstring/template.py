@@ -70,14 +70,17 @@ def _substitute(
         if allow_missing and res is None:
             res = match.group(0)
         elif res is None:
-            raise ValueError
+            raise ValueError(f"Substitution cannot be made for key '{match.group(1)}'")
         return res
 
     def _sub_square(match: Match[str]) -> str:
         # make curly substitutions inside of square brackets or remove the whole thing
         # if substitutions cannot be made.
-        resolved = re.sub(_CURLY_BRACKET_REGEX, _sub_curly, match.group(1))
-        return resolved if resolved != match.group(1) else ""
+        try:
+            resolved = re.sub(_CURLY_BRACKET_REGEX, _sub_curly, match.group(1))
+            return resolved if resolved != match.group(1) else ""
+        except ValueError:
+            return ""
 
     squared = re.sub(_SQUARE_BRACKET_REGEX, _sub_square, template)
     resolved = re.sub(_CURLY_BRACKET_REGEX, _sub_curly, squared)
