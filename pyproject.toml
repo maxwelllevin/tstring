@@ -1,0 +1,36 @@
+# [build-system]
+# requires = ["setuptools>=45", "setuptools_scm[toml]>=6.2"]
+# build-backend = "setuptools.build_meta"
+
+[build-system]
+requires = ["setuptools>=61.0", "setuptools_scm[toml]>=6.2"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "tstring"
+# version = "0.1.0"
+dynamic = ["version"]
+authors = [
+  { name="Maxwell Levin", email="24307537+maxwelllevin@users.noreply.github.com" },
+]
+description = "Delayed fstring-like string templates in python."
+readme = "README.md"
+requires-python = ">=3.7"
+keywords = ["string", "template"]
+license = {text = "BSD 3-Clause License"}
+classifiers = [
+    "Programming Language :: Python :: 3",
+]
+# dependencies = []
+
+
+
+# [tool.setuptools]
+# # packages = {find = {where = ["strem=]plate"]}}
+# packages = ["src"]
+
+[tool.setuptools_scm]
+write_to = "src/tstring/_version.py"
+
+[tool.setuptools.dynamic]
+version = {attr = "tstring.__version__"}

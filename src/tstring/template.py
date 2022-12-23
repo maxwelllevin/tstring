@@ -1,7 +1,5 @@
 import re
-from typing import Dict, List, Match
-
-TEMPLATE = "{a}.{b}.{c}[-{d}]"
+from typing import Dict, List, Match, Optional
 
 mapping = {
     "a": "hello",
@@ -16,7 +14,7 @@ _CURLY_BRACKET_REGEX = r"\{(.*?)\}"
 
 def _substitute(
     template: str,
-    mapping: Dict[str, str],
+    mapping: Optional[Dict[str, str]] = None,
     allow_missing: bool = False,
     **kwds: str,
 ) -> str:
@@ -61,6 +59,8 @@ def _substitute(
     Returns:
         str: The template string with the appropriate substitutions made.
     """
+    if mapping is None:
+        mapping = {}
     mapping = {**mapping, **kwds}
 
     def _sub_curly(match: Match[str]) -> str:
@@ -137,7 +137,10 @@ class Template:
         return len(queue) == 0
 
     def substitute(
-        self, mapping: Dict[str, str], allow_missing: bool = False, **kwds: str
+        self,
+        mapping: Optional[Dict[str, str]] = None,
+        allow_missing: bool = False,
+        **kwds: str,
     ) -> str:
         """Substitutes variables in a template string.
 

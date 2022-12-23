@@ -1,7 +1,7 @@
 from typing import Dict
 import pytest
 
-from src.template import Template
+from src.tstring import Template
 
 
 @pytest.mark.parametrize(
