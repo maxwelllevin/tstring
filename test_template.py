@@ -16,6 +16,7 @@ from src.tstring import Template
         ("ab", "{a}[{b}]", dict(a="a", b="b"), True),
         ("a.b", "{a}[.{b}]", dict(a="a", b="b"), True),
         ("defg", "{a}{b}{c}g", dict(a="d", b="e", c="f"), True),
+        ("defg", "{a}{b}{c}g", dict(a=lambda: "d", b=lambda: "e", c=lambda: "f"), True),
         ("d.e-gf", "{a}.{b}[-g{c}]", dict(a="d", b="e", c="f"), True),
         ("d.e-gf", "{a}.{b}[-g{c}][-{d}]", dict(a="d", b="e", c="f"), True),
     ),

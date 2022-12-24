@@ -1,7 +1,9 @@
-import re
-from typing import Dict, List, Match, Optional
+from __future__ import annotations
 
-__all__ = ("Template")
+import re
+from typing import Callable, Dict, List, Match, Optional, Union
+
+__all__ = "Template"
 
 _SQUARE_BRACKET_REGEX = r"\[(.*?)\]"
 _CURLY_BRACKET_REGEX = r"\{(.*?)\}"
@@ -9,9 +11,9 @@ _CURLY_BRACKET_REGEX = r"\{(.*?)\}"
 
 def _substitute(
     template: str,
-    mapping: Optional[Dict[str, Optional[str]]] = None,
+    mapping: dict[str, str | callable[[], str] | None] = None,
     allow_missing: bool = False,
-    **kwds: Optional[str],
+    **kwds: str | callable[[], str] | None,
 ) -> str:
     """Substitutes variables in a template string.
 
@@ -38,15 +40,17 @@ def _substitute(
     Args:
         template (str): The template string. Variables to substitute should be wrapped
             by curly braces `{}`.
-        mapping (Dict[str, str]): A key-value store of variable name to the value to
-            replace it with.
+        mapping (dict[str, str | callable[[], str] | None]): A key-value store of
+            variable name to the value to replace it with. If the value is a string it
+            is dropped-in directly. If it is a no-argument callable the return value of
+            the callable is used. If it is None, then it is treated as missing.
         allow_missing (bool, optional): Allow variables outside of square brackets to be
             missing, in which case they are left as-is, including the curly brackets.
             This is intended to allow users to perform some variable substitutions
             before all variables in the mapping are known. Defaults to False.
-        **kwds (Dict[str, str]): Optional extras to be merged into the variable mapping
-            dict. If a keyword passed here has the same name as a key in the mapping
-            dict, the value here would be used instead.
+        **kwds (str | callable[[], str] | None): Optional extras to be merged into the
+            mapping dict. If a keyword passed here has the same name as a key in the
+            mapping dict, the value here would be used instead.
 
     Raises:
         ValueError: If the substitutions cannot be made due to missing variables.
@@ -62,6 +66,8 @@ def _substitute(
         # group(1) returns string without {}, group(0) returns with {}
         # result is we only do replacements that we can actually do.
         res = mapping.get(match.group(1))
+        if callable(res):
+            res = res()
         if allow_missing and res is None:
             res = match.group(0)
         elif res is None:
@@ -136,22 +142,24 @@ class Template:
 
     def substitute(
         self,
-        mapping: Optional[Dict[str, Optional[str]]] = None,
+        mapping: dict[str, str | callable[[], str] | None] = None,
         allow_missing: bool = False,
-        **kwds: Optional[str],
+        **kwds: str | callable[[], str] | None,
     ) -> str:
         """Substitutes variables in a template string.
 
         Args:
-            mapping (Dict[str, str]): A key-value store of variable name to the value to
-                replace it with.
+            mapping (dict[str, str | callable[[], str] | None]): A key-value store of
+                variable name to the value to replace it with. If the value is a string it
+                is dropped-in directly. If it is a no-argument callable the return value of
+                the callable is used. If it is None, then it is treated as missing.
             allow_missing (bool, optional): Allow variables outside of square brackets to be
                 missing, in which case they are left as-is, including the curly brackets.
                 This is intended to allow users to perform some variable substitutions
                 before all variables in the mapping are known. Defaults to False.
-            **kwds (Dict[str, str]): Optional extras to be merged into the variable mapping
-                dict. If a keyword passed here has the same name as a key in the mapping
-                dict, the value here would be used instead.
+            **kwds (str | callable[[], str] | None): Optional extras to be merged into the
+                mapping dict. If a keyword passed here has the same name as a key in the
+                mapping dict, the value here would be used instead.
 
         Raises:
             ValueError: If the substitutions cannot be made due to missing variables.
