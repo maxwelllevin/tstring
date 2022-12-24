@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import re
-from typing import Callable, Dict, List, Match, Optional, Union
+from typing import Callable, Match
 
 __all__ = "Template"
 
@@ -11,9 +11,9 @@ _CURLY_BRACKET_REGEX = r"\{(.*?)\}"
 
 def _substitute(
     template: str,
-    mapping: dict[str, str | callable[[], str] | None] = None,
+    mapping: dict[str, str | Callable[[], str] | None] | None = None,
     allow_missing: bool = False,
-    **kwds: str | callable[[], str] | None,
+    **kwds: str | Callable[[], str] | None,
 ) -> str:
     """Substitutes variables in a template string.
 
@@ -40,15 +40,16 @@ def _substitute(
     Args:
         template (str): The template string. Variables to substitute should be wrapped
             by curly braces `{}`.
-        mapping (dict[str, str | callable[[], str] | None]): A key-value store of
-            variable name to the value to replace it with. If the value is a string it
-            is dropped-in directly. If it is a no-argument callable the return value of
-            the callable is used. If it is None, then it is treated as missing.
+        mapping (dict[str, str | Callable[[], str] | None] | None): A key-value pair
+            of variable name to the value to replace it with. If the value is a
+            string it is dropped-in directly. If it is a no-argument callable the
+            return value of the callable is used. If it is None, then it is treated
+            as missing and the action taken depends on the `allow_missing` parameter.
         allow_missing (bool, optional): Allow variables outside of square brackets to be
             missing, in which case they are left as-is, including the curly brackets.
             This is intended to allow users to perform some variable substitutions
             before all variables in the mapping are known. Defaults to False.
-        **kwds (str | callable[[], str] | None): Optional extras to be merged into the
+        **kwds (str | Callable[[], str] | None): Optional extras to be merged into the
             mapping dict. If a keyword passed here has the same name as a key in the
             mapping dict, the value here would be used instead.
 
@@ -131,7 +132,7 @@ class Template:
 
     @classmethod
     def _is_balanced(cls, template: str):
-        queue: List[str] = []
+        queue: list[str] = []
         for char in template:
             if char in "{[":
                 queue.append("}" if char == "{" else "]")
@@ -142,22 +143,23 @@ class Template:
 
     def substitute(
         self,
-        mapping: dict[str, str | callable[[], str] | None] = None,
+        mapping: dict[str, str | Callable[[], str] | None] | None = None,
         allow_missing: bool = False,
-        **kwds: str | callable[[], str] | None,
+        **kwds: str | Callable[[], str] | None,
     ) -> str:
         """Substitutes variables in a template string.
 
         Args:
-            mapping (dict[str, str | callable[[], str] | None]): A key-value store of
-                variable name to the value to replace it with. If the value is a string it
-                is dropped-in directly. If it is a no-argument callable the return value of
-                the callable is used. If it is None, then it is treated as missing.
+            mapping (dict[str, str | Callable[[], str] | None] | None): A key-value pair
+                of variable name to the value to replace it with. If the value is a
+                string it is dropped-in directly. If it is a no-argument callable the
+                return value of the callable is used. If it is None, then it is treated
+                as missing and the action taken depends on the `allow_missing` parameter.
             allow_missing (bool, optional): Allow variables outside of square brackets to be
                 missing, in which case they are left as-is, including the curly brackets.
                 This is intended to allow users to perform some variable substitutions
                 before all variables in the mapping are known. Defaults to False.
-            **kwds (str | callable[[], str] | None): Optional extras to be merged into the
+            **kwds (str | Callable[[], str] | None): Optional extras to be merged into the
                 mapping dict. If a keyword passed here has the same name as a key in the
                 mapping dict, the value here would be used instead.
 
