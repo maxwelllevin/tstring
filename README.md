@@ -1,6 +1,7 @@
 # tstring
 
 [![main](https://github.com/maxwelllevin/tstring/actions/workflows/pytest.yml/badge.svg)](https://github.com/maxwelllevin/tstring/actions/workflows/pytest.yml)
+[![codecov](https://codecov.io/github/maxwelllevin/tstring/branch/main/graph/badge.svg?token=W6D5FN6AUA)](https://codecov.io/github/maxwelllevin/tstring)
 [![build](https://github.com/maxwelllevin/tstring/actions/workflows/pypi.yml/badge.svg)](https://github.com/maxwelllevin/tstring/actions/workflows/pypi.yml)
 ![PyPI](https://img.shields.io/pypi/v/tstring)
 ![PyPI - Downloads](https://img.shields.io/pypi/dm/tstring)
