@@ -1,12 +1,7 @@
 import re
 from typing import Dict, List, Match, Optional
 
-mapping = {
-    "a": "hello",
-    "b": "there",
-    "c": "world",
-    "d": "Hah",
-}
+__all__ = ("Template")
 
 _SQUARE_BRACKET_REGEX = r"\[(.*?)\]"
 _CURLY_BRACKET_REGEX = r"\{(.*?)\}"
@@ -14,9 +9,9 @@ _CURLY_BRACKET_REGEX = r"\{(.*?)\}"
 
 def _substitute(
     template: str,
-    mapping: Optional[Dict[str, str]] = None,
+    mapping: Optional[Dict[str, Optional[str]]] = None,
     allow_missing: bool = False,
-    **kwds: str,
+    **kwds: Optional[str],
 ) -> str:
     """Substitutes variables in a template string.
 
@@ -141,9 +136,9 @@ class Template:
 
     def substitute(
         self,
-        mapping: Optional[Dict[str, str]] = None,
+        mapping: Optional[Dict[str, Optional[str]]] = None,
         allow_missing: bool = False,
-        **kwds: str,
+        **kwds: Optional[str],
     ) -> str:
         """Substitutes variables in a template string.
 
