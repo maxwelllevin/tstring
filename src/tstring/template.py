@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import re
-from typing import Callable, Match
+from typing import Callable, Mapping, Match
 
 __all__ = "Template"
 
@@ -11,7 +11,7 @@ _CURLY_BRACKET_REGEX = r"\{(.*?)\}"
 
 def _substitute(
     template: str,
-    mapping: dict[str, str | Callable[[], str] | None] | None = None,
+    mapping: Mapping[str, str | Callable[[], str] | None] | None = None,
     allow_missing: bool = False,
     **kwds: str | Callable[[], str] | None,
 ) -> str:
@@ -40,7 +40,7 @@ def _substitute(
     Args:
         template (str): The template string. Variables to substitute should be wrapped
             by curly braces `{}`.
-        mapping (dict[str, str | Callable[[], str] | None] | None): A key-value pair
+        mapping (Mapping[str, str | Callable[[], str] | None] | None): A key-value pair
             of variable name to the value to replace it with. If the value is a
             string it is dropped-in directly. If it is a no-argument callable the
             return value of the callable is used. If it is None, then it is treated
@@ -143,14 +143,14 @@ class Template:
 
     def substitute(
         self,
-        mapping: dict[str, str | Callable[[], str] | None] | None = None,
+        mapping: Mapping[str, str | Callable[[], str] | None] | None = None,
         allow_missing: bool = False,
         **kwds: str | Callable[[], str] | None,
     ) -> str:
         """Substitutes variables in a template string.
 
         Args:
-            mapping (dict[str, str | Callable[[], str] | None] | None): A key-value pair
+            mapping (Mapping[str, str | Callable[[], str] | None] | None): A key-value pair
                 of variable name to the value to replace it with. If the value is a
                 string it is dropped-in directly. If it is a no-argument callable the
                 return value of the callable is used. If it is None, then it is treated
