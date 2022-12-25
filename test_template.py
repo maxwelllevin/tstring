@@ -53,7 +53,7 @@ def test_failures(
         ("a.b", dict(a="d", b="e", c="f"), dict(a="a", b="b", c=None)),
     ),
 )
-def test_overrides(expected: str, mapping: Dict[str, str], keywords: dict[str, str]):
+def test_overrides(expected: str, mapping: Dict[str, str], keywords: Dict[str, str]):
     template = Template("{a}.{b}[.{c}]")
     assert template.substitute(mapping, **keywords) == expected
 
