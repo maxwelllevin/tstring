@@ -31,6 +31,7 @@ def test_correctness(
     ("error", "template", "mapping", "allow_missing"),
     (
         (ValueError, "{a}", dict(), False),
+        (ValueError, "{a}", None, False),
         (ValueError, "{a", dict(), False),
         (ValueError, "[a}]", dict(), False),
         (ValueError, "{a}{b}{c}", dict(), False),
@@ -41,6 +42,20 @@ def test_failures(
 ):
     with pytest.raises(error):
         Template(template).substitute(mapping, allow_missing=allow_missing)
+
+
+@pytest.mark.parametrize(
+    ("expected", "mapping", "keywords"),
+    (
+        ("a.b.c", dict(a="a", b="b", c="c"), dict()),
+        ("a.b.c", dict(), dict(a="a", b="b", c="c")),
+        ("a.b.c", dict(a="a", b="b", c="d"), dict(c="c")),
+        ("a.b", dict(a="d", b="e", c="f"), dict(a="a", b="b", c=None)),
+    ),
+)
+def test_overrides(expected: str, mapping: Dict[str, str], keywords: dict[str, str]):
+    template = Template("{a}.{b}[.{c}]")
+    assert template.substitute(mapping, **keywords) == expected
 
 
 def test_repr():
